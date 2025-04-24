@@ -17,40 +17,23 @@ age = st.number_input('Âge', min_value=0, step=1)
 balance = st.number_input('Balance bancaire')
 num_products = st.number_input('Nombre de produits', min_value=0, max_value=10, step=1)
 is_active = st.selectbox('Client actif ', ('Oui', 'Non'))
+gender = st.selectbox('Sexe', ('Male', 'Female'))
+geography = st.selectbox('Géographie', ('France', 'Germany', 'Spain'))
 
+#is_active :
 if is_active == 'Oui':
     is_active = 1 
 else : 0
+#gender :
+gender_val = 1 if gender == 'Male' else 0
+#geography :
+geography_val = {'France': 0, 'Germany': 1, 'Spain': 2}[geography]
 
-gender = st.selectbox('Sexe', ('Male', 'Female'))
-Géographie = st.selectbox('Géographie', ('France', 'Germany', 'Spain'))
+features = np.array([[age, balance, num_products, is_active,
+                          geography_val,
+                          gender_val]])
 
-if st.button('Prédire'):
-    # Gender
-    if gender == 'Female' :
-     female = 1
-    else : 0
+prediction = model.predict(features)
 
-    if gender == 'Male':
-        male = 1 
-    else : 0
-
-    # Géographie
-    if Géographie == 'France' :
-       france = 1 
-    else: france = 0
-    if Géographie == 'Germany':
-        germany = 1 
-    else: germany = 0
-    if Géographie == 'Spain':
-        spain = 1 
-    else: spain = 0
-
-    features = np.array([[age, balance, num_products, is_active,
-                          france, germany, spain,
-                          female, male]])
-
-    prediction = model.predict(features)
-
-    # Affichage du résultat
-    st.success(f"Résultat de la prédiction : {int(prediction[0])}")
+# Affichage du résultat
+st.success(f"Résultat de la prédiction : {int(prediction[0])}")
